@@ -11,6 +11,7 @@ import { reducerType } from "../reducers";
 
 const Profile: FC = () => {
   const { userInfo } = useSelector((state: reducerType) => state.user);
+  console.log(4444, userInfo);
 
   return (
     <AppLayout>
@@ -21,7 +22,7 @@ const Profile: FC = () => {
         <Card
           actions={[
             <div key="twit">
-              짹짹
+              짹짹333
               <br />
               {userInfo.Posts}
             </div>,

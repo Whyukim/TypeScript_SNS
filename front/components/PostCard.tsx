@@ -6,6 +6,7 @@ import {
   RetweetOutlined,
 } from "@ant-design/icons";
 import { Avatar, Button, Card, List, Popover } from "antd";
+import Link from "next/link";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { reducerType } from "../reducers";
@@ -21,6 +22,7 @@ import CommentForm from "./CommentForm";
 import FollowButton from "./FollowButton";
 import PostCardContent from "./PostCardContent";
 import PostImages from "./PostImages";
+import moment from "moment";
 
 export interface Props {
   post: postStateChild;
@@ -128,18 +130,34 @@ const PostCard: FC<Props> = ({ post }) => {
               )
             }
           >
+            <div style={{ float: "right" }}>
+              {moment(post.createdAt).fromNow(true)}
+            </div>
             <Card.Meta
-              avatar={<Avatar>{post.Retweet.User.nickname[0]}</Avatar>}
+              avatar={
+                <Link href={`/user/${post.Retweet.User.id}`} prefetch={false}>
+                  <Avatar>{post.Retweet.User.nickname[0]}</Avatar>
+                </Link>
+              }
               title={post.Retweet.User.nickname}
               description={<PostCardContent postData={post.Retweet.content} />}
             />
           </Card>
         ) : (
-          <Card.Meta
-            avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-            title={post.User.nickname}
-            description={<PostCardContent postData={post.content} />}
-          />
+          <>
+            <div style={{ float: "right" }}>
+              {moment(post.createdAt).fromNow(true)}
+            </div>
+            <Card.Meta
+              avatar={
+                <Link href={`/user/${post.User.id}`} prefetch={false}>
+                  <Avatar>{post.User.nickname[0]}</Avatar>
+                </Link>
+              }
+              title={post.User.nickname}
+              description={<PostCardContent postData={post.content} />}
+            />
+          </>
         )}
       </Card>
       {commentFormOpened && (
@@ -149,15 +167,22 @@ const PostCard: FC<Props> = ({ post }) => {
             header={`${post.Comments.length}개의 댓글`}
             itemLayout="horizontal"
             dataSource={post.Comments}
-            renderItem={(item: postCommentState) => (
-              <li>
-                <Comment
-                  author={item.User.nickname}
-                  avartar={item.User.nickname[0]}
-                  content={item.content}
-                />
-              </li>
-            )}
+            renderItem={(item) => {
+              console.log(3333333333333, item);
+              return (
+                <li>
+                  <Comment
+                    author={item.User.nickname}
+                    avartar={
+                      <Link href={`/user/${item.User.id}`} prefetch={false}>
+                        <Avatar>{item.User.nickname[0]}</Avatar>
+                      </Link>
+                    }
+                    content={item.content}
+                  />
+                </li>
+              );
+            }}
           />
         </div>
       )}

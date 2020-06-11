@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useCallback, useState } from "react";
 import Link from "next/link";
 import { Menu, Input, Row, Col } from "antd";
 import UserProfile from "./UserProfile";
@@ -7,10 +7,8 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { reducerType } from "../reducers";
 import { createGlobalStyle } from "styled-components";
-interface menuItems {
-  label: JSX.Element;
-  key: string;
-}
+import useInput from "../hooks/useInput";
+import Router from "next/router";
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
@@ -31,32 +29,35 @@ const Global = createGlobalStyle`
   }
 `;
 
-const menuItems: menuItems[] = [
-  {
-    label: <Link href="/">홈</Link>,
-    key: "home",
-  },
-  {
-    label: <Link href="/profile">프로필</Link>,
-    key: "a",
-  },
-  {
-    label: <SearchInput />,
-    key: "b",
-  },
-  {
-    label: <Link href="/signup">회원가입</Link>,
-    key: "c",
-  },
-];
-
 const AppLayout: FC<React.PropsWithChildren<{}>> = ({ children }) => {
+  const [searchInput, onChangeSearchInput] = useInput("");
   const { me } = useSelector((state: reducerType) => state.user);
+
+  const onSearch = useCallback(() => {
+    Router.push(`/hashtag/${searchInput}`);
+  }, [searchInput]);
 
   return (
     <div>
       <Global />
-      <Menu mode="horizontal" items={menuItems} />
+      <Menu mode="horizontal">
+        <Menu.Item>
+          <Link href="/">홈</Link>
+        </Menu.Item>
+        <Menu.Item>
+          <Link href="/profile">프로필</Link>
+        </Menu.Item>
+        <Menu.Item>
+          <SearchInput
+            value={searchInput}
+            onChange={onChangeSearchInput}
+            onSearch={onSearch}
+          />
+        </Menu.Item>
+        <Menu.Item>
+          <Link href="/signup">회원가입</Link>
+        </Menu.Item>
+      </Menu>
       <Row gutter={8}>
         <Col xs={24} md={6}>
           {me ? <UserProfile /> : <LoginForm />}

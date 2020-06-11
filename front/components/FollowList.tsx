@@ -1,12 +1,13 @@
 import { StopOutlined } from "@ant-design/icons";
 import { Button, Card, List } from "antd";
-import React, { FC, useCallback } from "react";
+import React, { FC, ReactNode, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { REMOVE_FOLLOWER_REQUEST, UNFOLLOW_REQUEST } from "../reducers/user";
 
 interface Props {
   header: string;
   data: {
+    nickname: ReactNode;
     id: number;
   }[];
   onClickMore(): void;

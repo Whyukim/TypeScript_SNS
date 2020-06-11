@@ -1,4 +1,5 @@
 import { Avatar, Button, Card } from "antd";
+import Link from "next/link";
 import React, { Dispatch, FC, SetStateAction, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { reducerType } from "../reducers";
@@ -16,19 +17,25 @@ const UserProfile: FC = () => {
     <Card
       actions={[
         <div key="twit">
-          게시글
-          <br />
-          {me.Posts.length}
+          <Link href={`/user/${me.id}`}>
+            짹짹
+            <br />
+            {me.Posts.length}
+          </Link>
         </div>,
         <div key="followings">
-          팔로잉
-          <br />
-          {me.Followings.length}
+          <Link href="/profile">
+            팔로잉
+            <br />
+            {me.Followings.length}
+          </Link>
         </div>,
         <div key="followings">
-          팔로워
-          <br />
-          {me.Followers.length}
+          <Link href="/profile">
+            팔로워
+            <br />
+            {me.Followers.length}
+          </Link>
         </div>,
       ]}
     >

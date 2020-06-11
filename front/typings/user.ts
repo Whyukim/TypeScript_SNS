@@ -46,10 +46,20 @@ export interface meState {
   Followers: { id: number }[];
   Followings: { id: number }[];
 }
+export interface aboutState {
+  id: number;
+  email: string;
+  nickname: string;
+  createdAt: string;
+  updatedAt: string;
+  Posts: number;
+  Followings: number;
+  Followers: number;
+}
 
 export interface userState {
   me: meState | null;
-  userInfo: object | null;
+  userInfo: aboutState | null;
   loadMyInfoLoading: boolean; // 유저 정보 가져오기 시도중
   loadMyInfoDone: boolean;
   loadMyInfoError: string | null;

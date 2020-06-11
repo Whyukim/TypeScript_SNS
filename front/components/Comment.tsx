@@ -1,10 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
 import { Avatar } from "antd";
 
 interface Props {
   author: string;
-  avartar: string;
+  avartar: ReactElement;
   content: string;
 }
 

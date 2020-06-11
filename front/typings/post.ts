@@ -38,14 +38,24 @@ import {
 export interface userState {
   id: number;
   nickname: string;
+  content?: string;
+  User?: any;
   email?: string;
   password?: string;
   createdAt?: string;
   updatedAt?: string;
 }
 export interface postCommentState {
-  User: userState;
+  id: number;
   content: string;
+  User: {
+    id: number;
+    nickname: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+  UserId: number;
+  PostId: number;
 }
 export interface postLikersState {
   id: number;
