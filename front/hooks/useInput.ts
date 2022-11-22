@@ -8,7 +8,7 @@ import {
 
 type ReturnTypes<T> = [
   T,
-  (e: ChangeEvent<HTMLInputElement>) => void,
+  (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
   Dispatch<SetStateAction<T>>
 ];
 

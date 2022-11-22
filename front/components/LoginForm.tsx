@@ -8,10 +8,8 @@ import React, {
 import { Form, Input, Button } from "antd";
 import Link from "next/link";
 import styled from "styled-components";
-
-interface Props {
-  setIsLogin: Dispatch<SetStateAction<boolean>>;
-}
+import { useDispatch } from "react-redux";
+import { loginAction } from "../reducer/user";
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -21,7 +19,8 @@ const LogoutWrapper = styled(Form)`
   margin: 10px;
 `;
 
-const LoginForm: FC<Props> = ({ setIsLogin }) => {
+const LoginForm: FC = () => {
+  const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -34,12 +33,12 @@ const LoginForm: FC<Props> = ({ setIsLogin }) => {
     },
     []
   );
-  const onSubmitFinish = useCallback(() => {
-    setIsLogin(true);
-  }, []);
+  const onSubmitForm = useCallback(() => {
+    dispatch(loginAction({ id, password }));
+  }, [id, password]);
 
   return (
-    <LogoutWrapper onFinish={onSubmitFinish}>
+    <LogoutWrapper onFinish={onSubmitForm}>
       <div>
         <label>아이디</label>
         <br />
