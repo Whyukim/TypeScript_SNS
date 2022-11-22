@@ -7,17 +7,7 @@ export interface postStateChild {
     nickname: string;
   };
   content: string;
-  Images: [
-    {
-      src: string;
-    },
-    {
-      src: string;
-    },
-    {
-      src: string;
-    }
-  ];
+  Images: { src: string }[];
   Comments: [
     {
       user: {

@@ -3,7 +3,7 @@ const LOG_OUT = "LOG_OUT";
 
 export interface userState {
   isLoggedIn: boolean;
-  user: userState | null;
+  me: { id: string; password: string } | null;
   signUpDate: object;
   loginData: object;
 }
@@ -22,7 +22,7 @@ export interface LogOutRequestAction {
 
 export const initialState: userState = {
   isLoggedIn: false,
-  user: null,
+  me: null,
   signUpDate: {},
   loginData: {},
 };
@@ -48,13 +48,13 @@ const reducer = (state = initialState, action: UserReducerAction) => {
       return {
         ...state,
         isLoggedIn: true,
-        user: action.data,
+        me: action.data,
       };
     case LOG_OUT:
       return {
         ...state,
         isLoggedIn: false,
-        user: null,
+        me: null,
       };
     default:
       return state;

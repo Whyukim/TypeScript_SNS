@@ -2,13 +2,11 @@ import { StopOutlined } from "@ant-design/icons";
 import { Button, Card, List } from "antd";
 import React, { FC } from "react";
 
-interface PropsData {
-  nickname: string;
-}
-
 interface Props {
   header: string;
-  data: PropsData[];
+  data: {
+    nickname: string;
+  }[];
 }
 
 const FollowList: FC<Props> = ({ header, data }) => {

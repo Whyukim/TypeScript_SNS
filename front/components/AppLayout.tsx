@@ -5,14 +5,14 @@ import UserProfile from "./UserProfile";
 import LoginForm from "./LoginForm";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { userState } from "../reducer/user";
+import { reducerType } from "../reducer";
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
 `;
 
 const AppLayout: FC<React.PropsWithChildren<{}>> = ({ children }) => {
-  const { isLoggedIn } = useSelector((state: userState) => state.user);
+  const { isLoggedIn } = useSelector((state: reducerType) => state.user);
 
   return (
     <div>
