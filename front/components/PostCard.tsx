@@ -12,6 +12,7 @@ import { reducerType } from "../reducer";
 import { postStateChild } from "../reducer/post";
 import Comment from "./Comment";
 import CommentForm from "./CommentForm";
+import PostCardContent from "./PostCardContent";
 import PostImages from "./PostImages";
 
 export interface Props {
@@ -70,7 +71,7 @@ const PostCard: FC<Props> = ({ post }) => {
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
           title={post.User.nickname}
-          description={post.content}
+          description={<PostCardContent postData={post.content} />}
         />
       </Card>
       {commentFormOpened && (
