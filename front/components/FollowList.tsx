@@ -10,6 +10,7 @@ interface Props {
 }
 
 const FollowList: FC<Props> = ({ header, data }) => {
+  if (!data) return <div>hello</div>;
   return (
     <List
       style={{ marginBottom: 20 }}

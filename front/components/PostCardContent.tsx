@@ -8,7 +8,7 @@ const PostCardContent: FC<Props> = ({ postData }) => {
   const reg = /(#[^\s#]+)/g;
   return (
     <div>
-      {postData.split(reg).map((v, i) => {
+      {postData?.split(reg).map((v, i) => {
         if (v.match(reg)) {
           return (
             <Link href={`/hashtag/${v.slice(1)}`} key={i}>

@@ -5,8 +5,12 @@ import UserProfile from "./UserProfile";
 import LoginForm from "./LoginForm";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { reducerType } from "../reducer";
+import { reducerType } from "../reducers";
 import { createGlobalStyle } from "styled-components";
+interface menuItems {
+  label: JSX.Element;
+  key: string;
+}
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
@@ -27,29 +31,35 @@ const Global = createGlobalStyle`
   }
 `;
 
+const menuItems: menuItems[] = [
+  {
+    label: <Link href="/">홈</Link>,
+    key: "home",
+  },
+  {
+    label: <Link href="/profile">프로필</Link>,
+    key: "a",
+  },
+  {
+    label: <SearchInput />,
+    key: "b",
+  },
+  {
+    label: <Link href="/signup">회원가입</Link>,
+    key: "c",
+  },
+];
+
 const AppLayout: FC<React.PropsWithChildren<{}>> = ({ children }) => {
-  const { isLoggedIn } = useSelector((state: reducerType) => state.user);
+  const { me } = useSelector((state: reducerType) => state.user);
 
   return (
     <div>
       <Global />
-      <Menu mode="horizontal">
-        <Menu.Item>
-          <Link href="/">홈</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link href="/profile">프로필</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <SearchInput />
-        </Menu.Item>
-        <Menu.Item>
-          <Link href="/signup">회원가입</Link>
-        </Menu.Item>
-      </Menu>
+      <Menu mode="horizontal" items={menuItems} />
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          {isLoggedIn ? <UserProfile /> : <LoginForm />}
+          {me ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}

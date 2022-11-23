@@ -5,15 +5,21 @@ import AppLayout from "../components/AppLayout";
 import useInput from "../hooks/useInput";
 
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
+import { useDispatch, useSelector } from "react-redux";
+import { SIGN_UP_REQUEST } from "../reducers/user";
+import { reducerType } from "../reducers";
 
 const signup: FC = () => {
+  const dispatch = useDispatch();
+  const { signUpLoading } = useSelector((state: reducerType) => state.user);
+
   const [passwordCheck, setPasswordCheck] = useState("");
   const [term, setTerm] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [termError, setTermError] = useState(false);
 
-  const [id, onChangeId] = useInput("");
-  const [nick, onChangeNick] = useInput("");
+  const [email, onChangeEmail] = useInput("");
+  const [nickname, onChangeNickName] = useInput("");
   const [password, onChangePassword] = useInput("");
 
   const onSubmit = useCallback(() => {
@@ -25,14 +31,11 @@ const signup: FC = () => {
       setTermError(true);
       return;
     }
-    console.log({
-      id,
-      nick,
-      password,
-      passwordCheck,
-      term,
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: { email, password, nickname },
     });
-  }, [id, nick, password, passwordCheck, term]);
+  }, [email, nickname, password, passwordCheck, term]);
 
   const onChangePasswordCheck = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,18 +58,24 @@ const signup: FC = () => {
         </Head>
         <Form onFinish={onSubmit} style={{ padding: 10 }}>
           <div>
-            <label htmlFor="user-id">아이디</label>
-            <br />
-            <Input name="user-id" value={id} required onChange={onChangeId} />
-          </div>
-          <div>
-            <label htmlFor="user-nick">닉네임</label>
+            <label htmlFor="user-email">이메일</label>
             <br />
             <Input
-              name="user-nick"
-              value={nick}
+              name="user-email"
+              value={email}
+              type="email"
               required
-              onChange={onChangeNick}
+              onChange={onChangeEmail}
+            />
+          </div>
+          <div>
+            <label htmlFor="user-nickname">닉네임</label>
+            <br />
+            <Input
+              name="user-nickname"
+              value={nickname}
+              required
+              onChange={onChangeNickName}
             />
           </div>
           <div>

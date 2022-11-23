@@ -12,12 +12,16 @@
   "dependencies": {
     "@ant-design/icons": "^4.8.0",
     "antd": "^5.0.0",
+    "axios": "^1.2.0",
+    "immer": "^9.0.16",
     "next": "^13.0.4",
     "next-redux-wrapper": "^6.0.2",
     "react-redux": "^7.2.9",
     "react-slick": "^0.29.0",
     "redux": "^4.1.2",
     "redux-devtools-extension": "^2.13.9",
+    "redux-saga": "^1.2.1",
+    "shortid": "^2.2.16",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
