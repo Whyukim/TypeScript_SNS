@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, Input } from "antd";
 import Head from "next/head";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import AppLayout from "../components/AppLayout";
 import useInput from "../hooks/useInput";
 
@@ -8,10 +8,13 @@ import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import { SIGN_UP_REQUEST } from "../reducers/user";
 import { reducerType } from "../reducers";
+import Router from "next/router";
 
 const signup: FC = () => {
   const dispatch = useDispatch();
-  const { signUpLoading } = useSelector((state: reducerType) => state.user);
+  const { signUpLoading, signUpDone, signUpError } = useSelector(
+    (state: reducerType) => state.user
+  );
 
   const [passwordCheck, setPasswordCheck] = useState("");
   const [term, setTerm] = useState(false);
@@ -21,6 +24,18 @@ const signup: FC = () => {
   const [email, onChangeEmail] = useInput("");
   const [nickname, onChangeNickName] = useInput("");
   const [password, onChangePassword] = useInput("");
+
+  useEffect(() => {
+    if (signUpDone) {
+      Router.push("/");
+    }
+  }, [signUpDone]);
+
+  useEffect(() => {
+    if (signUpError) {
+      alert(signUpError);
+    }
+  }, [signUpError]);
 
   const onSubmit = useCallback(() => {
     if (password !== passwordCheck) {
@@ -112,7 +127,7 @@ const signup: FC = () => {
             )}
           </div>
           <div style={{ marginTop: 10 }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={signUpLoading}>
               가입하기
             </Button>
           </div>
