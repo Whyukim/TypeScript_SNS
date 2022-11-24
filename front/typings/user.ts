@@ -3,6 +3,9 @@ import {
   CHANGE_NICKNAME_FAILURE,
   CHANGE_NICKNAME_REQUEST,
   CHANGE_NICKNAME_SUCCESS,
+  FOLLOW_FAILURE,
+  FOLLOW_REQUEST,
+  FOLLOW_SUCCESS,
   LOG_IN_FAILURE,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
@@ -13,6 +16,9 @@ import {
   SIGN_UP_FAILURE,
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
+  UNFOLLOW_FAILURE,
+  UNFOLLOW_REQUEST,
+  UNFOLLOW_SUCCESS,
 } from "../reducers/user";
 
 export interface myState {
@@ -109,6 +115,30 @@ export interface RemovePostOfMeAction {
   data: any;
 }
 
+export interface FollowRequestAction {
+  type: typeof FOLLOW_REQUEST;
+}
+export interface FollowSuccessAction {
+  type: typeof FOLLOW_SUCCESS;
+  data: number;
+}
+export interface FollowFailureAction {
+  type: typeof FOLLOW_FAILURE;
+  error: any;
+}
+
+export interface UnFollowRequestAction {
+  type: typeof UNFOLLOW_REQUEST;
+}
+export interface UnFollowSuccessAction {
+  type: typeof UNFOLLOW_SUCCESS;
+  data: number;
+}
+export interface UnFollowFailureAction {
+  type: typeof UNFOLLOW_FAILURE;
+  error: any;
+}
+
 export type UserReducerAction =
   | LogInRequestAction
   | LogInSuccessction
@@ -123,4 +153,10 @@ export type UserReducerAction =
   | ChangeNicknameSuccessAction
   | ChangeNicknameFailureAction
   | AddPostToMeAction
-  | RemovePostOfMeAction;
+  | RemovePostOfMeAction
+  | FollowRequestAction
+  | FollowSuccessAction
+  | FollowFailureAction
+  | UnFollowRequestAction
+  | UnFollowSuccessAction
+  | UnFollowFailureAction;

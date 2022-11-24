@@ -13,6 +13,7 @@ import { REMOVE_POST_REQUEST } from "../reducers/post";
 import { postCommentState, postStateChild } from "../typings/post";
 import Comment from "./Comment";
 import CommentForm from "./CommentForm";
+import FollowButton from "./FollowButton";
 import PostCardContent from "./PostCardContent";
 import PostImages from "./PostImages";
 
@@ -52,7 +53,7 @@ const PostCard: FC<Props> = ({ post }) => {
           liked ? (
             <HeartTwoTone
               twoToneColor="#eb2f96"
-              key="heart"
+              key="headr"
               onClick={onToggleLike}
             />
           ) : (
@@ -60,7 +61,7 @@ const PostCard: FC<Props> = ({ post }) => {
           ),
           <MessageOutlined key="message" onClick={onToggleComment} />,
           <Popover
-            key="more"
+            key="ellipsis"
             content={
               <Button.Group>
                 {id && post.User.id === Number(id) ? (
@@ -83,6 +84,7 @@ const PostCard: FC<Props> = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
+        extra={id && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}

@@ -5,13 +5,15 @@ import {
   ADD_POST_FAILURE,
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
+  LOAD_POSTS_FAILURE,
+  LOAD_POSTS_REQUEST,
+  LOAD_POSTS_SUCCESS,
   REMOVE_POST_FAILURE,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
 } from "../reducers/post";
 
 export interface postCommentState {
-  id: number;
   User: {
     id: number;
     nickname: string;
@@ -27,13 +29,17 @@ export interface postStateChild {
     nickname: string;
   };
   content: string;
-  Images: { src: string }[];
+  Images: { src: any }[];
   Comments: postCommentState[];
 }
 
 export interface postState {
   mainPosts: postStateChild[];
   imagePaths: [];
+  hasMorePosts: boolean;
+  loadPostsLoading: boolean;
+  loadPostsDone: boolean;
+  loadPostsError: null;
   addPostLoading: boolean;
   addPostDone: boolean;
   addPostError: null;
@@ -81,6 +87,18 @@ export interface RemovePostFailureAction {
   error: any;
 }
 
+export interface LoadPostRequestAction {
+  type: typeof LOAD_POSTS_REQUEST;
+}
+export interface LoadPostSuccesstAction {
+  type: typeof LOAD_POSTS_SUCCESS;
+  data: any;
+}
+export interface LoadPostFailureAction {
+  type: typeof LOAD_POSTS_FAILURE;
+  error: any;
+}
+
 export type PostReducerAction =
   | AddPostRequestAction
   | AddPostSuccesstAction
@@ -90,4 +108,7 @@ export type PostReducerAction =
   | AddCommentFailureAction
   | RemovePostRequestAction
   | RemovePostSuccesstAction
-  | RemovePostFailureAction;
+  | RemovePostFailureAction
+  | LoadPostRequestAction
+  | LoadPostSuccesstAction
+  | LoadPostFailureAction;
