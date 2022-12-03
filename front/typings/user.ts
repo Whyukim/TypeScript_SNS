@@ -50,7 +50,7 @@ export interface userState {
   changeNicknameLoading: boolean; // 닉네임 변경 시도중
   changeNicknameDone: boolean;
   changeNicknameError: null;
-  me: myState | null;
+  me: loginData | myState | null;
   signUpData: object;
   loginData: object;
 }

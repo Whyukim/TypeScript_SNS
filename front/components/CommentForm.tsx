@@ -16,7 +16,6 @@ const CommentForm: FC<Props> = ({ post }) => {
   const [commentText, onChangeCommentText, setCommentText] = useInput("");
   const { addCommentDone } = useSelector((state: reducerType) => state.post);
 
-  console.log(123, addCommentDone);
   useEffect(() => {
     if (addCommentDone) {
       setCommentText("");
@@ -24,7 +23,6 @@ const CommentForm: FC<Props> = ({ post }) => {
   }, [addCommentDone]);
 
   const onSubmitComment = useCallback(() => {
-    console.log(post.id, commentText, id);
     dispatch({
       type: ADD_COMMENT_REQUEST,
       data: { content: commentText, postId: post.id, userId: id },

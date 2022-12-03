@@ -12,7 +12,7 @@ import Router from "next/router";
 
 const signup: FC = () => {
   const dispatch = useDispatch();
-  const { signUpLoading, signUpDone, signUpError } = useSelector(
+  const { signUpLoading, signUpDone, signUpError, me } = useSelector(
     (state: reducerType) => state.user
   );
 
@@ -26,8 +26,14 @@ const signup: FC = () => {
   const [password, onChangePassword] = useInput("");
 
   useEffect(() => {
+    if (me && me?.id) {
+      Router.replace("/");
+    }
+  }, [me, me?.id]);
+
+  useEffect(() => {
     if (signUpDone) {
-      Router.push("/");
+      Router.replace("/");
     }
   }, [signUpDone]);
 

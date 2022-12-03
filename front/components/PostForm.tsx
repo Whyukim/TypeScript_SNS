@@ -26,7 +26,6 @@ const PostForm = () => {
 
   const onSubmit = useCallback(() => {
     disaptch(addPost(text));
-    setText("");
   }, [text]);
 
   return (

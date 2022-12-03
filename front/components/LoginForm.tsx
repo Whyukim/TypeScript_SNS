@@ -3,6 +3,7 @@ import React, {
   FC,
   SetStateAction,
   useCallback,
+  useEffect,
   useState,
 } from "react";
 import { Form, Input, Button } from "antd";
@@ -22,9 +23,17 @@ const LogoutWrapper = styled(Form)`
 
 const LoginForm: FC = () => {
   const dispatch = useDispatch();
-  const { logInLoading } = useSelector((state: reducerType) => state.user);
+  const { logInLoading, logInError } = useSelector(
+    (state: reducerType) => state.user
+  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (logInError) {
+      alert(logInError);
+    }
+  }, [logInError]);
 
   const onChangeId = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
