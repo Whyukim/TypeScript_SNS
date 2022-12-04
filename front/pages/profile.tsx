@@ -1,14 +1,28 @@
 import Head from "next/head";
 import Router from "next/router";
 import React, { FC, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "../components/AppLayout";
 import FollowList from "../components/FollowList";
 import NickNameEditForm from "../components/NickNameEditForm";
 import { reducerType } from "../reducers";
+import {
+  LOAD_FOLLOWERS_REQUEST,
+  LOAD_FOLLOWINGS_REQUEST,
+} from "../reducers/user";
 
 const profile: FC = () => {
+  const dispatch = useDispatch();
   const { me } = useSelector((state: reducerType) => state.user);
+
+  useEffect(() => {
+    dispatch({
+      type: LOAD_FOLLOWERS_REQUEST,
+    });
+    dispatch({
+      type: LOAD_FOLLOWINGS_REQUEST,
+    });
+  }, []);
 
   useEffect(() => {
     if (!(me && me.id)) {

@@ -1,15 +1,36 @@
 import { StopOutlined } from "@ant-design/icons";
 import { Button, Card, List } from "antd";
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { REMOVE_FOLLOWER_REQUEST, UNFOLLOW_REQUEST } from "../reducers/user";
 
 interface Props {
   header: string;
   data: {
+    id: number;
     nickname: string;
   }[];
 }
 
 const FollowList: FC<Props> = ({ header, data }) => {
+  const dispatch = useDispatch();
+  const onClickUnFollow = useCallback(
+    (id) => () => {
+      if (header === "팔로잉") {
+        dispatch({
+          type: UNFOLLOW_REQUEST,
+          data: id,
+        });
+      } else {
+        dispatch({
+          type: REMOVE_FOLLOWER_REQUEST,
+          data: id,
+        });
+      }
+    },
+    []
+  );
+
   if (!data) return <div>hello</div>;
   return (
     <List
@@ -26,7 +47,10 @@ const FollowList: FC<Props> = ({ header, data }) => {
       dataSource={data}
       renderItem={(item) => (
         <List.Item style={{ marginTop: 20 }}>
-          <Card actions={[<StopOutlined key="stop" />]}>
+          <Card
+            actions={[<StopOutlined key="stop" />]}
+            onClick={onClickUnFollow(item.id)}
+          >
             <Card.Meta description={item.nickname} />
           </Card>
         </List.Item>

@@ -5,8 +5,10 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const dotenv = require("dotenv");
+const morgan = require("morgan");
 
 const postRouter = require("./routes/post");
+const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user");
 const db = require("./models");
 const passportConfig = require("./passport");
@@ -22,6 +24,7 @@ db.sequelize
 
 passportConfig();
 
+app.use(morgan("dev"));
 app.use(cors({ origin: "http://localhost:3000", credentials: true })); // proxy 문제해결
 // req.body에 데이터 넣어주기
 app.use(express.json());
@@ -43,6 +46,7 @@ app.get("/", (req, res) => {
 
 app.use("/user", userRouter);
 app.use("/post", postRouter);
+app.use("/posts", postsRouter);
 
 app.listen(3065, () => {
   console.log(`

@@ -6,6 +6,9 @@ import {
   FOLLOW_FAILURE,
   FOLLOW_REQUEST,
   FOLLOW_SUCCESS,
+  LOAD_MY_INFO_FAILURE,
+  LOAD_MY_INFO_REQUEST,
+  LOAD_MY_INFO_SUCCESS,
   LOG_IN_FAILURE,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
@@ -21,17 +24,21 @@ import {
   UNFOLLOW_SUCCESS,
 } from "../reducers/user";
 
-export interface myState {
+export interface meState {
+  id: number;
+  email: string;
   nickname: string;
-  id: string;
-  password: string;
-  // 일단
-  Posts: any;
-  Followers: any;
-  Followings: any;
+  createdAt: string;
+  updatedAt: string;
+  Posts: { id: number }[];
+  Followers: { id: number }[];
+  Followings: { id: number }[];
 }
 
 export interface userState {
+  loadUserLoading: boolean; // 유저 정보 가져오기 시도중
+  loadUserDone: boolean;
+  loadUserError: null;
   followLoading: boolean; // 팔로우 시도중
   followDone: boolean;
   followError: null;
@@ -50,7 +57,7 @@ export interface userState {
   changeNicknameLoading: boolean; // 닉네임 변경 시도중
   changeNicknameDone: boolean;
   changeNicknameError: null;
-  me: loginData | myState | null;
+  me: meState | null;
   signUpData: object;
   loginData: object;
 }
@@ -59,17 +66,27 @@ export interface loginData {
   [key: string]: string;
 }
 
+export interface LoadMyInfoRequestAction {
+  type: typeof LOAD_MY_INFO_REQUEST;
+}
+export interface LoadMyInfoSuccessction {
+  type: typeof LOAD_MY_INFO_SUCCESS;
+  data: any;
+}
+export interface LoadMyInfoFailureAction {
+  error: null;
+  type: typeof LOAD_MY_INFO_FAILURE;
+}
+
 export interface LogInRequestAction {
   type: typeof LOG_IN_REQUEST;
-  data: loginData;
 }
 export interface LogInSuccessction {
   type: typeof LOG_IN_SUCCESS;
-  data: loginData;
+  data: meState;
 }
 export interface LogInFailureAction {
   type: typeof LOG_IN_FAILURE;
-  data: loginData;
   error: any;
 }
 
@@ -159,4 +176,7 @@ export type UserReducerAction =
   | FollowFailureAction
   | UnFollowRequestAction
   | UnFollowSuccessAction
-  | UnFollowFailureAction;
+  | UnFollowFailureAction
+  | LoadMyInfoRequestAction
+  | LoadMyInfoSuccessction
+  | LoadMyInfoFailureAction;

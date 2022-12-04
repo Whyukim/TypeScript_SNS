@@ -9,7 +9,11 @@ import { Avatar, Button, Card, List, Popover } from "antd";
 import React, { FC, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { reducerType } from "../reducers";
-import { REMOVE_POST_REQUEST } from "../reducers/post";
+import {
+  LIKE_POST_REQUEST,
+  REMOVE_POST_REQUEST,
+  UNLIKE_POST_REQUEST,
+} from "../reducers/post";
 import { postCommentState, postStateChild } from "../typings/post";
 import Comment from "./Comment";
 import CommentForm from "./CommentForm";
@@ -24,13 +28,22 @@ export interface Props {
 const PostCard: FC<Props> = ({ post }) => {
   const dispatch = useDispatch();
   const id = useSelector((state: reducerType) => state.user.me?.id);
+  const liked = post.Likers.find((v) => v.id === id);
   const { removePostLoading } = useSelector((state: reducerType) => state.post);
 
   const [commentFormOpened, setCommentFormOpened] = useState(false);
-  const [liked, setLiked] = useState(false);
 
-  const onToggleLike = useCallback(() => {
-    setLiked((prev) => !prev);
+  const onLike = useCallback(() => {
+    dispatch({
+      type: LIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, []);
+  const onUnLike = useCallback(() => {
+    dispatch({
+      type: UNLIKE_POST_REQUEST,
+      data: post.id,
+    });
   }, []);
 
   const onToggleComment = useCallback(() => {
@@ -54,10 +67,10 @@ const PostCard: FC<Props> = ({ post }) => {
             <HeartTwoTone
               twoToneColor="#eb2f96"
               key="headr"
-              onClick={onToggleLike}
+              onClick={onUnLike}
             />
           ) : (
-            <HeartOutlined key="heart" onClick={onToggleLike} />
+            <HeartOutlined key="heart" onClick={onLike} />
           ),
           <MessageOutlined key="message" onClick={onToggleComment} />,
           <Popover

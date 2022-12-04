@@ -18,19 +18,26 @@ export interface postCommentState {
     id: number;
     nickname: string;
   };
-  createdAt?: Date;
   content: string;
 }
 
 export interface postStateChild {
   id: number;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  UserId: number;
+  RetWeetId: null;
+  Images: [];
+  Comments: any[];
   User: {
     id: number;
+    email: string;
     nickname: string;
+    password: string;
+    createdAt: string;
+    updatedAt: string;
   };
-  content: string;
-  Images: { src: any }[];
-  Comments: postCommentState[];
 }
 
 export interface postState {
@@ -56,7 +63,7 @@ export interface AddPostRequestAction {
 }
 export interface AddPostSuccesstAction {
   type: typeof ADD_POST_SUCCESS;
-  data: string;
+  data: postStateChild;
 }
 export interface AddPostFailureAction {
   error: any;
@@ -68,7 +75,7 @@ export interface AddCommentRequestAction {
 }
 export interface AddCommentSuccesstAction {
   type: typeof ADD_COMMENT_SUCCESS;
-  data: { content: string; postId: number; userId: number };
+  data: any;
 }
 export interface AddCommentFailureAction {
   type: typeof ADD_COMMENT_FAILURE;
