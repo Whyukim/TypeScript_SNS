@@ -26,6 +26,9 @@ import {
   REMOVE_POST_FAILURE,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
+  RETWEET_FAILURE,
+  RETWEET_REQUEST,
+  RETWEET_SUCCESS,
   UNLIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
@@ -151,13 +154,14 @@ function* addComment(action) {
 }
 
 // 게시물 불러오기
-function loadPostsAPI(data) {
-  return axios.get("/posts", data);
+function loadPostsAPI(lastId) {
+  console.log(123123, lastId);
+  return axios.get(`/posts?lastId=${lastId || 0}`);
 }
 
 function* loadPosts(action) {
   try {
-    const result = yield call(loadPostsAPI, action.data);
+    const result = yield call(loadPostsAPI, action.lastId);
     yield put({
       type: LOAD_POSTS_SUCCESS,
       data: result.data,
@@ -166,7 +170,28 @@ function* loadPosts(action) {
     console.error(err);
     yield put({
       type: LOAD_POSTS_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
+    });
+  }
+}
+
+// 리트윗
+function retweetAPI(data) {
+  return axios.post(`/post/${data}/retweet`, data);
+}
+
+function* retweet(action) {
+  try {
+    const result = yield call(retweetAPI, action.data);
+    yield put({
+      type: RETWEET_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: RETWEET_FAILURE,
+      error: err.response.data,
     });
   }
 }
@@ -187,7 +212,7 @@ function* uploadImages(action) {
     console.error(err);
     yield put({
       type: UPLOAD_IMAGES_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -220,6 +245,10 @@ function* watchUploadImages() {
   yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
 }
 
+function* watchRetweet() {
+  yield takeLatest(RETWEET_REQUEST, retweet);
+}
+
 export default function* postSage() {
   yield all([
     fork(watchAddPost),
@@ -229,5 +258,6 @@ export default function* postSage() {
     fork(watchLikePost),
     fork(watchUnLikePost),
     fork(watchLoadPosts),
+    fork(watchRetweet),
   ]);
 }

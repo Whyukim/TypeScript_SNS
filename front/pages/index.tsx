@@ -11,9 +11,12 @@ const Home: FC = () => {
   const dispatch = useDispatch();
 
   const { me } = useSelector((state: reducerType) => state.user);
-  const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
-    (state: reducerType) => state.post
-  );
+  const { mainPosts, hasMorePosts, loadPostsLoading, retweetError } =
+    useSelector((state: reducerType) => state.post);
+
+  useEffect(() => {
+    if (retweetError) alert(retweetError);
+  }, [retweetError]);
 
   useEffect(() => {
     dispatch({
@@ -26,13 +29,14 @@ const Home: FC = () => {
   useEffect(() => {
     function onScroll() {
       if (
-        window.scrollY + document.documentElement.clientHeight >
-        document.documentElement.scrollHeight - 500
+        window.pageYOffset + document.documentElement.clientHeight >
+        document.documentElement.scrollHeight - 300
       ) {
         if (hasMorePosts && !loadPostsLoading) {
+          const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch({
             type: LOAD_POSTS_REQUEST,
-            data: mainPosts[mainPosts.length - 1].id,
+            lastId,
           });
         }
       }
@@ -41,7 +45,7 @@ const Home: FC = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [mainPosts, hasMorePosts, loadPostsLoading]);
+  }, [hasMorePosts, loadPostsLoading, mainPosts]);
 
   return (
     <AppLayout>
