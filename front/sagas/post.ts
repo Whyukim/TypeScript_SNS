@@ -39,12 +39,13 @@ import shortId from "shortid";
 
 /* ### 게시물 추가 ### */
 function addPostAPI(data) {
-  return axios.post("/post", { content: data });
+  return axios.post("/post", data);
 }
 
 function* addPost(action) {
   try {
     const result = yield call(addPostAPI, action.data);
+    console.log(444, result);
     yield put({
       type: ADD_POST_SUCCESS,
       data: result.data,

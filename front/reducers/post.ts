@@ -149,6 +149,7 @@ const reducer = (state = initialState, action: PostReducerAction) => {
         draft.addPostLoading = false;
         draft.addPostDone = true;
         draft.mainPosts.unshift(action.data);
+        draft.imagePaths = [];
         break;
       case ADD_POST_FAILURE:
         draft.addPostLoading = false;
@@ -242,6 +243,11 @@ const reducer = (state = initialState, action: PostReducerAction) => {
       case UPLOAD_IMAGES_FAILURE:
         draft.uploadImagesLoading = false;
         draft.uploadImagesError = action.error;
+        break;
+
+      // 이미지 삭제
+      case REMOVE_IMAGE:
+        draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
         break;
 
       default:

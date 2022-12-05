@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const path = require("path");
 
 const postRouter = require("./routes/post");
 const postsRouter = require("./routes/posts");
@@ -13,7 +14,7 @@ const userRouter = require("./routes/user");
 const db = require("./models");
 const passportConfig = require("./passport");
 
-dotenv.config();
+dotenv.config(); // .env파일 데이터 읽기
 
 db.sequelize
   .sync()
@@ -24,25 +25,22 @@ db.sequelize
 
 passportConfig();
 
-app.use(morgan("dev"));
+app.use("/", express.static(path.join(__dirname, "uploads"))); // 이미지
+app.use(morgan("dev")); // 터미널에서 실행되는거 보여줌
 app.use(cors({ origin: "http://localhost:3000", credentials: true })); // proxy 문제해결
 // req.body에 데이터 넣어주기
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(express.json()); // json 값 읽기
+app.use(express.urlencoded({ extended: true })); // qs모듈 사용
+app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키값 읽기
 app.use(
   session({
     saveUninitialized: false,
-    resave: false,
+    resave: false, //세션 아이디를 접속할때마다 새롭게 발급하지 않음
     secret: process.env.COOKIE_SECRET,
   })
 );
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.get("/", (req, res) => {
-  res.send("hello express");
-});
+app.use(passport.initialize()); //passport 초기화
+app.use(passport.session()); // passport 세션 사용
 
 app.use("/user", userRouter);
 app.use("/post", postRouter);
