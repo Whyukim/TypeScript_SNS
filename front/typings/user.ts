@@ -6,6 +6,12 @@ import {
   FOLLOW_FAILURE,
   FOLLOW_REQUEST,
   FOLLOW_SUCCESS,
+  LOAD_FOLLOWERS_FAILURE,
+  LOAD_FOLLOWERS_REQUEST,
+  LOAD_FOLLOWERS_SUCCESS,
+  LOAD_FOLLOWINGS_FAILURE,
+  LOAD_FOLLOWINGS_REQUEST,
+  LOAD_FOLLOWINGS_SUCCESS,
   LOAD_MY_INFO_FAILURE,
   LOAD_MY_INFO_REQUEST,
   LOAD_MY_INFO_SUCCESS,
@@ -15,6 +21,9 @@ import {
   LOG_OUT_FAILURE,
   LOG_OUT_REQUEST,
   LOG_OUT_SUCCESS,
+  REMOVE_FOLLOWER_FAILURE,
+  REMOVE_FOLLOWER_REQUEST,
+  REMOVE_FOLLOWER_SUCCESS,
   REMOVE_POST_OF_ME,
   SIGN_UP_FAILURE,
   SIGN_UP_REQUEST,
@@ -36,30 +45,37 @@ export interface meState {
 }
 
 export interface userState {
+  me: meState | null;
   loadUserLoading: boolean; // 유저 정보 가져오기 시도중
   loadUserDone: boolean;
-  loadUserError: null;
+  loadUserError: string | null;
   followLoading: boolean; // 팔로우 시도중
   followDone: boolean;
-  followError: null;
+  followError: string | null;
   unfollowLoading: boolean; // 언팔로우 시도중
   unfollowDone: boolean;
-  unfollowError: null;
+  unfollowError: string | null;
   logInLoading: boolean; // 로그인 시도중
   logInDone: boolean;
-  logInError: null;
+  logInError: string | null;
   logOutLoading: boolean; // 로그아웃 시도중
   logOutDone: boolean;
-  logOutError: null;
+  logOutError: string | null;
   signUpLoading: boolean; // 회원가입 시도중
   signUpDone: boolean;
-  signUpError: null;
+  signUpError: string | null;
   changeNicknameLoading: boolean; // 닉네임 변경 시도중
   changeNicknameDone: boolean;
   changeNicknameError: null;
-  me: meState | null;
-  signUpData: object;
-  loginData: object;
+  loadFollowersLoading: boolean; // 팔로워 가져오기 시도중
+  loadFollowersDone: boolean;
+  loadFollowersError: string | null;
+  loadFollowingsLoading: boolean; // 팔로잉 가져오기 시도중
+  loadFollowingsDone: boolean;
+  loadFollowingsError: string | null;
+  removeFollowerLoading: boolean; // 팔로워 삭제 시도중
+  removeFollowerDone: boolean;
+  removeFollowerError: string | null;
 }
 
 export interface loginData {
@@ -117,6 +133,9 @@ export interface ChangeNicknameRequestAction {
 }
 export interface ChangeNicknameSuccessAction {
   type: typeof CHANGE_NICKNAME_SUCCESS;
+  data: {
+    nickname: string;
+  };
 }
 export interface ChangeNicknameFailureAction {
   type: typeof CHANGE_NICKNAME_FAILURE;
@@ -125,11 +144,13 @@ export interface ChangeNicknameFailureAction {
 
 export interface AddPostToMeAction {
   type: typeof ADD_POST_TO_ME;
-  data: any;
+  data: number;
 }
 export interface RemovePostOfMeAction {
   type: typeof REMOVE_POST_OF_ME;
-  data: any;
+  data: {
+    PostId: number;
+  };
 }
 
 export interface FollowRequestAction {
@@ -137,7 +158,9 @@ export interface FollowRequestAction {
 }
 export interface FollowSuccessAction {
   type: typeof FOLLOW_SUCCESS;
-  data: number;
+  data: {
+    UserId: number;
+  };
 }
 export interface FollowFailureAction {
   type: typeof FOLLOW_FAILURE;
@@ -149,10 +172,50 @@ export interface UnFollowRequestAction {
 }
 export interface UnFollowSuccessAction {
   type: typeof UNFOLLOW_SUCCESS;
-  data: number;
+  data: {
+    UserId: number;
+  };
 }
 export interface UnFollowFailureAction {
   type: typeof UNFOLLOW_FAILURE;
+  error: any;
+}
+
+export interface LoadFollowersRequestAction {
+  type: typeof LOAD_FOLLOWERS_REQUEST;
+}
+export interface LoadFollowersSuccessAction {
+  type: typeof LOAD_FOLLOWERS_SUCCESS;
+  data: any;
+}
+export interface LoadFollowersFailureAction {
+  type: typeof LOAD_FOLLOWERS_FAILURE;
+  error: any;
+}
+
+export interface LoadFollowingsRequestAction {
+  type: typeof LOAD_FOLLOWINGS_REQUEST;
+}
+export interface LoadFollowingsSuccessAction {
+  type: typeof LOAD_FOLLOWINGS_SUCCESS;
+  data: any;
+}
+export interface LoadFollowingsFailureAction {
+  type: typeof LOAD_FOLLOWINGS_FAILURE;
+  error: any;
+}
+
+export interface RemoveFollowerRequestAction {
+  type: typeof REMOVE_FOLLOWER_REQUEST;
+}
+export interface RemoveFollowerSuccessAction {
+  type: typeof REMOVE_FOLLOWER_SUCCESS;
+  data: {
+    UserId: number;
+  };
+}
+export interface RemoveFollowerFailureAction {
+  type: typeof REMOVE_FOLLOWER_FAILURE;
   error: any;
 }
 
@@ -179,4 +242,13 @@ export type UserReducerAction =
   | UnFollowFailureAction
   | LoadMyInfoRequestAction
   | LoadMyInfoSuccessction
-  | LoadMyInfoFailureAction;
+  | LoadMyInfoFailureAction
+  | LoadFollowersRequestAction
+  | LoadFollowersSuccessAction
+  | LoadFollowersFailureAction
+  | LoadFollowingsRequestAction
+  | LoadFollowingsSuccessAction
+  | LoadFollowingsFailureAction
+  | RemoveFollowerRequestAction
+  | RemoveFollowerSuccessAction
+  | RemoveFollowerFailureAction;

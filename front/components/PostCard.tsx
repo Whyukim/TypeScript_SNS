@@ -78,7 +78,7 @@ const PostCard: FC<Props> = ({ post }) => {
   return (
     <div style={{ marginBottom: 10 }}>
       <Card
-        cover={post.Images[0] && <PostImages images={post.Images} />}
+        cover={post.Images.length > 0 && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key="retweet" onClick={onRetweet} />,
           liked ? (

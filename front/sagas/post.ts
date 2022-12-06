@@ -10,13 +10,13 @@ import {
 } from "redux-saga/effects";
 
 import {
+  generateDummyPost,
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_REQUEST,
   ADD_COMMENT_SUCCESS,
   ADD_POST_FAILURE,
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
-  generateDummyPost,
   LIKE_POST_FAILURE,
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
@@ -48,7 +48,6 @@ function addPostAPI(data) {
 function* addPost(action) {
   try {
     const result = yield call(addPostAPI, action.data);
-    console.log(444, result);
     yield put({
       type: ADD_POST_SUCCESS,
       data: result.data,
@@ -155,7 +154,6 @@ function* addComment(action) {
 
 // 게시물 불러오기
 function loadPostsAPI(lastId) {
-  console.log(123123, lastId);
   return axios.get(`/posts?lastId=${lastId || 0}`);
 }
 

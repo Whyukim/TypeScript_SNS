@@ -77,8 +77,6 @@ export const initialState: userState = {
   changeNicknameDone: false,
   changeNicknameError: null,
   me: null,
-  signUpData: {},
-  loginData: {},
 };
 
 const dummyUser = (data) => ({
@@ -270,8 +268,8 @@ const reducer = (state = initialState, action: UserReducerAction) => {
         break;
       case REMOVE_FOLLOWER_SUCCESS:
         draft.removeFollowerLoading = false;
-        draft.me.Followers = draft.me.Followers.filter((v) =>
-          console.log(v.id, action.data.UserId)
+        draft.me.Followers = draft.me.Followers.filter(
+          (v) => v.id !== action.data.UserId
         );
         draft.removeFollowerDone = true;
         break;
