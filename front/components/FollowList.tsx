@@ -8,7 +8,6 @@ interface Props {
   header: string;
   data: {
     id: number;
-    nickname: string;
   }[];
 }
 

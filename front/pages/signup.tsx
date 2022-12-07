@@ -6,9 +6,12 @@ import useInput from "../hooks/useInput";
 
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { useDispatch, useSelector } from "react-redux";
-import { SIGN_UP_REQUEST } from "../reducers/user";
+import { LOAD_MY_INFO_REQUEST, SIGN_UP_REQUEST } from "../reducers/user";
 import { reducerType } from "../reducers";
 import Router from "next/router";
+import axios from "axios";
+import wrapper from "../store/configureStore";
+import { END } from "redux-saga";
 
 const signup: FC = () => {
   const dispatch = useDispatch();
@@ -142,5 +145,24 @@ const signup: FC = () => {
     </>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context) => {
+    const cookie = context.req ? context.req.headers.cookie : "";
+    axios.defaults.headers.Cookie = "";
+
+    // 프론트 서버에서 쿠기가 공유되는 문제
+    if (context.req && cookie) {
+      axios.defaults.headers.Cookie = cookie;
+    }
+
+    context.store.dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  }
+);
 
 export default signup;

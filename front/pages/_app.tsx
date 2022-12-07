@@ -1,6 +1,7 @@
 import "antd/dist/reset.css";
 import Head from "next/head";
 import { FC } from "react";
+
 import wrapper from "../store/configureStore";
 
 const App: FC = ({ Component }: any) => {

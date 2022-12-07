@@ -5,6 +5,10 @@ export const LOAD_MY_INFO_REQUEST = "LOAD_MY_INFO_REQUEST";
 export const LOAD_MY_INFO_SUCCESS = "LOAD_MY_INFO_SUCCESS";
 export const LOAD_MY_INFO_FAILURE = "LOAD_MY_INFO_FAILURE";
 
+export const LOAD_USER_REQUEST = "LOAD_USER_REQUEST";
+export const LOAD_USER_SUCCESS = "LOAD_USER_SUCCESS";
+export const LOAD_USER_FAILURE = "LOAD_USER_FAILURE";
+
 export const LOG_IN_REQUEST = "LOG_IN_REQUEST";
 export const LOG_IN_SUCCESS = "LOG_IN_SUCCESS";
 export const LOG_IN_FAILURE = "LOG_IN_FAILURE";
@@ -46,6 +50,9 @@ export const ADD_POST_TO_ME = "ADD_POST_TO_ME";
 export const REMOVE_POST_OF_ME = "REMOVE_POST_OF_ME";
 
 export const initialState: userState = {
+  loadMyInfoLoading: false, // 유저 정보 가져오기 시도중
+  loadMyInfoDone: false,
+  loadMyInfoError: null,
   loadUserLoading: false, // 유저 정보 가져오기 시도중
   loadUserDone: false,
   loadUserError: null,
@@ -77,6 +84,7 @@ export const initialState: userState = {
   changeNicknameDone: false,
   changeNicknameError: null,
   me: null,
+  userInfo: null,
 };
 
 const dummyUser = (data) => ({
@@ -104,20 +112,36 @@ export const logoutRequestAction = () => {
 const reducer = (state = initialState, action: UserReducerAction) => {
   return produce(state, (draft) => {
     switch (action.type) {
-      // 로그인
+      // 내정보 가져오기
       case LOAD_MY_INFO_REQUEST:
-        draft.logInLoading = true;
-        draft.logInDone = false;
-        draft.logInError = null;
+        draft.loadMyInfoLoading = true;
+        draft.loadMyInfoError = null;
+        draft.loadMyInfoDone = false;
         break;
       case LOAD_MY_INFO_SUCCESS:
-        draft.logInLoading = false;
-        draft.logInDone = true;
+        draft.loadMyInfoLoading = false;
         draft.me = action.data;
+        draft.loadMyInfoDone = true;
         break;
       case LOAD_MY_INFO_FAILURE:
-        draft.logInLoading = false;
-        draft.logInError = action.error;
+        draft.loadMyInfoLoading = false;
+        draft.loadMyInfoError = action.error;
+        break;
+
+      // 다른 유저 정보 가져오기
+      case LOAD_USER_REQUEST:
+        draft.loadUserLoading = true;
+        draft.loadUserError = null;
+        draft.loadUserDone = false;
+        break;
+      case LOAD_USER_SUCCESS:
+        draft.loadUserLoading = false;
+        draft.userInfo = action.data;
+        draft.loadUserDone = true;
+        break;
+      case LOAD_USER_FAILURE:
+        draft.loadUserLoading = false;
+        draft.loadUserError = action.error;
         break;
 
       // 로그인
