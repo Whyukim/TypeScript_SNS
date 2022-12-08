@@ -8,9 +8,18 @@ import {
   LIKE_POST_FAILURE,
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
+  LOAD_HASHTAG_POSTS_FAILURE,
+  LOAD_HASHTAG_POSTS_REQUEST,
+  LOAD_HASHTAG_POSTS_SUCCESS,
   LOAD_POSTS_FAILURE,
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
+  LOAD_POST_FAILURE,
+  LOAD_POST_REQUEST,
+  LOAD_POST_SUCCESS,
+  LOAD_USER_POSTS_FAILURE,
+  LOAD_USER_POSTS_REQUEST,
+  LOAD_USER_POSTS_SUCCESS,
   REMOVE_IMAGE,
   REMOVE_POST_FAILURE,
   REMOVE_POST_REQUEST,
@@ -26,11 +35,16 @@ import {
   UPLOAD_IMAGES_SUCCESS,
 } from "../reducers/post";
 
+export interface userState {
+  id: number;
+  nickname: string;
+  email?: string;
+  password?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
 export interface postCommentState {
-  User: {
-    id: number;
-    nickname: string;
-  };
+  User: userState;
   content: string;
 }
 export interface postLikersState {
@@ -43,26 +57,29 @@ export interface postLikersState {
   };
 }
 
+export interface retweetState {
+  id: number;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  UserId: number;
+  RetweetId: number;
+  Images: { src: string }[];
+  User: userState;
+}
+
 export interface postStateChild {
   id: number;
   content: string;
   createdAt: Date;
   updatedAt: Date;
   UserId: number;
-  RetWeetId: null;
-  Images: [];
-  Comments: any[];
-  Likers: postLikersState[];
-  User: {
-    id: number;
-    email: string;
-    nickname: string;
-    password: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-  Retweet: any;
   RetweetId: number;
+  Retweet: retweetState;
+  Images: { src: string }[];
+  Comments: userState[];
+  Likers: postLikersState[];
+  User: userState;
 }
 
 export interface postState {
@@ -93,6 +110,10 @@ export interface postState {
   retweetLoading: boolean;
   retweetDone: boolean;
   retweetError: string | null;
+  loadPostLoading: boolean;
+  loadPostDone: boolean;
+  loadPostError: string | null;
+  singlePost: null | postStateChild;
 }
 
 export interface AddPostRequestAction {
@@ -105,6 +126,18 @@ export interface AddPostSuccesstAction {
 export interface AddPostFailureAction {
   error: any;
   type: typeof ADD_POST_FAILURE;
+}
+
+export interface LoadPostRequestAction {
+  type: typeof LOAD_POST_REQUEST;
+}
+export interface LoadPostSuccesstAction {
+  type: typeof LOAD_POST_SUCCESS;
+  data: postStateChild;
+}
+export interface LoadPostFailureAction {
+  type: typeof LOAD_POST_FAILURE;
+  error: any;
 }
 
 export interface AddCommentRequestAction {
@@ -133,15 +166,39 @@ export interface RemovePostFailureAction {
   error: any;
 }
 
-export interface LoadPostRequestAction {
+export interface LoadPostsRequestAction {
   type: typeof LOAD_POSTS_REQUEST;
 }
-export interface LoadPostSuccesstAction {
+export interface LoadPostsSuccesstAction {
   type: typeof LOAD_POSTS_SUCCESS;
   data: any;
 }
-export interface LoadPostFailureAction {
+export interface LoadPostsFailureAction {
   type: typeof LOAD_POSTS_FAILURE;
+  error: any;
+}
+
+export interface LoadUserPostsRequestAction {
+  type: typeof LOAD_USER_POSTS_REQUEST;
+}
+export interface LoadUserPostsSuccesstAction {
+  type: typeof LOAD_USER_POSTS_SUCCESS;
+  data: any;
+}
+export interface LoadUserPostsFailureAction {
+  type: typeof LOAD_USER_POSTS_FAILURE;
+  error: any;
+}
+
+export interface LoadHashTagPostsRequestAction {
+  type: typeof LOAD_HASHTAG_POSTS_REQUEST;
+}
+export interface LoadHashTagPostsSuccesstAction {
+  type: typeof LOAD_HASHTAG_POSTS_SUCCESS;
+  data: any;
+}
+export interface LoadHashTagPostsFailureAction {
+  type: typeof LOAD_HASHTAG_POSTS_FAILURE;
   error: any;
 }
 export interface LikePostRequestAction {
@@ -207,9 +264,9 @@ export type PostReducerAction =
   | RemovePostRequestAction
   | RemovePostSuccesstAction
   | RemovePostFailureAction
-  | LoadPostRequestAction
-  | LoadPostSuccesstAction
-  | LoadPostFailureAction
+  | LoadPostsRequestAction
+  | LoadPostsSuccesstAction
+  | LoadPostsFailureAction
   | LikePostRequestAction
   | LikePostSuccesstAction
   | LikePostFailureAction
@@ -222,4 +279,13 @@ export type PostReducerAction =
   | UpLoadImagesRequestAction
   | UpLoadImagesSuccesstAction
   | UpLoadImagesFailureAction
-  | RemoveImagesAction;
+  | RemoveImagesAction
+  | LoadPostRequestAction
+  | LoadPostSuccesstAction
+  | LoadPostFailureAction
+  | LoadUserPostsRequestAction
+  | LoadUserPostsSuccesstAction
+  | LoadUserPostsFailureAction
+  | LoadHashTagPostsRequestAction
+  | LoadHashTagPostsSuccesstAction
+  | LoadHashTagPostsFailureAction;

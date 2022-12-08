@@ -15,6 +15,9 @@ import {
   LOAD_MY_INFO_FAILURE,
   LOAD_MY_INFO_REQUEST,
   LOAD_MY_INFO_SUCCESS,
+  LOAD_USER_FAILURE,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
   LOG_IN_FAILURE,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
@@ -46,6 +49,10 @@ export interface meState {
 
 export interface userState {
   me: meState | null;
+  userInfo: object | null;
+  loadMyInfoLoading: boolean; // 유저 정보 가져오기 시도중
+  loadMyInfoDone: boolean;
+  loadMyInfoError: string | null;
   loadUserLoading: boolean; // 유저 정보 가져오기 시도중
   loadUserDone: boolean;
   loadUserError: string | null;
@@ -92,6 +99,18 @@ export interface LoadMyInfoSuccessction {
 export interface LoadMyInfoFailureAction {
   error: null;
   type: typeof LOAD_MY_INFO_FAILURE;
+}
+
+export interface LoadUserRequestAction {
+  type: typeof LOAD_USER_REQUEST;
+}
+export interface LoadUserSuccessction {
+  type: typeof LOAD_USER_SUCCESS;
+  data: any;
+}
+export interface LoadUserFailureAction {
+  error: null;
+  type: typeof LOAD_USER_FAILURE;
 }
 
 export interface LogInRequestAction {
@@ -251,4 +270,7 @@ export type UserReducerAction =
   | LoadFollowingsFailureAction
   | RemoveFollowerRequestAction
   | RemoveFollowerSuccessAction
-  | RemoveFollowerFailureAction;
+  | RemoveFollowerFailureAction
+  | LoadUserRequestAction
+  | LoadUserSuccessction
+  | LoadUserFailureAction;
