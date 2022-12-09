@@ -18,7 +18,6 @@ const Post = () => {
   const { id } = router.query;
   const { singlePost } = useSelector((state: reducerType) => state.post);
 
-
   return (
     <AppLayout>
       <Head>
@@ -46,6 +45,17 @@ const Post = () => {
     </AppLayout>
   );
 };
+
+// export async function getStaticPaths() {
+//   return {
+//     paths: [
+//       { params: { id: "91" } },
+//       { params: { id: "92" } },
+//       { params: { id: "93" } },
+//     ],
+//     fallback: false,
+//   };
+// }
 
 export const getServerSideProps = wrapper.getServerSideProps(
   async (context) => {

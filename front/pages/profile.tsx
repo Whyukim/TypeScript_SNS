@@ -1,7 +1,7 @@
 import axios from "axios";
 import Head from "next/head";
 import Router from "next/router";
-import React, { FC, useEffect } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { END } from "redux-saga";
 import AppLayout from "../components/AppLayout";
@@ -14,19 +14,25 @@ import {
   LOAD_MY_INFO_REQUEST,
 } from "../reducers/user";
 import wrapper from "../store/configureStore";
+import useSWR from "swr";
+
+const fetcher = (url: string) =>
+  axios.get(url, { withCredentials: true }).then((res) => res.data);
 
 const profile: FC = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { me } = useSelector((state: reducerType) => state.user);
+  const [followersLimit, setFollowersLimit] = useState(3);
+  const [followingsLimit, setFollowingsLimit] = useState(3);
 
-  useEffect(() => {
-    dispatch({
-      type: LOAD_FOLLOWERS_REQUEST,
-    });
-    dispatch({
-      type: LOAD_FOLLOWINGS_REQUEST,
-    });
-  }, []);
+  const { data: followersData, error: followersError } = useSWR(
+    `http://localhost:3065/user/followers?limit=${followersLimit}`,
+    fetcher
+  );
+  const { data: followingsData, error: followingsError } = useSWR(
+    `http://localhost:3065/user/followings?limit=${followingsLimit}`,
+    fetcher
+  );
 
   useEffect(() => {
     if (!(me && me.id)) {
@@ -34,7 +40,20 @@ const profile: FC = () => {
     }
   }, [me && me.id]);
 
-  if (!me) return null;
+  const loadMoreFollowings = useCallback(() => {
+    setFollowingsLimit((prev) => prev + 3);
+  }, []);
+
+  const loadMoreFollowers = useCallback(() => {
+    setFollowersLimit((prev) => prev + 3);
+  }, []);
+
+  if (!me) return <div>내정보 로드중</div>;
+  if (followersError | followingsError) {
+    console.error(followersError || followingsError);
+    return <div>팔로잉 팔로워 로딩중 에러</div>;
+  }
+
   return (
     <>
       <Head>
@@ -42,8 +61,18 @@ const profile: FC = () => {
       </Head>
       <AppLayout>
         <NickNameEditForm />
-        <FollowList header="팔로잉" data={me?.Followings} />
-        <FollowList header="팔로워" data={me?.Followers} />
+        <FollowList
+          header="팔로잉"
+          data={followingsData}
+          onClickMore={loadMoreFollowings}
+          loading={!followingsData && !followingsError}
+        />
+        <FollowList
+          header="팔로워"
+          data={followersData}
+          onClickMore={loadMoreFollowers}
+          loading={!followersData && !followersError}
+        />
       </AppLayout>
     </>
   );
@@ -62,7 +91,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
     });
-
 
     context.store.dispatch(END);
     await context.store.sagaTask.toPromise();

@@ -9,9 +9,11 @@ interface Props {
   data: {
     id: number;
   }[];
+  onClickMore(): void;
+  loading: boolean;
 }
 
-const FollowList: FC<Props> = ({ header, data }) => {
+const FollowList: FC<Props> = ({ header, data, onClickMore, loading }) => {
   const dispatch = useDispatch();
   const onClickUnFollow = useCallback(
     (id) => () => {
@@ -39,7 +41,9 @@ const FollowList: FC<Props> = ({ header, data }) => {
       header={<div>{header}</div>}
       loadMore={
         <div style={{ textAlign: "center", margin: "10px 0" }}>
-          <Button>더보기</Button>
+          <Button onClick={onClickMore} loading={loading}>
+            더보기
+          </Button>
         </div>
       }
       bordered
