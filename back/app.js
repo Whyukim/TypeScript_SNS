@@ -7,6 +7,8 @@ const passport = require("passport");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const path = require("path");
+const hpp = require("hpp");
+const helmet = require("helmet");
 
 const postRouter = require("./routes/post");
 const postsRouter = require("./routes/posts");
@@ -27,8 +29,27 @@ db.sequelize
 
 passportConfig();
 
+if (process.env.NODE_ENV === "production") {
+  app.use(morgan("combined")); // 터미널에서 실행되는거 보여줌
+  app.use(hpp());
+  app.use(helmet({ contentSecurityPolicy: false }));
+  app.use(
+    cors({
+      origin: "http://nodebird.com",
+      credentials: true,
+    })
+  );
+} else {
+  app.use(morgan("dev")); // 터미널에서 실행되는거 보여줌
+  app.use(
+    cors({
+      origin: true,
+      credentials: true,
+    })
+  );
+}
+
 app.use("/", express.static(path.join(__dirname, "uploads"))); // 이미지
-app.use(morgan("dev")); // 터미널에서 실행되는거 보여줌
 app.use(cors({ origin: "http://localhost:3000", credentials: true })); // proxy 문제해결
 // req.body에 데이터 넣어주기
 app.use(express.json()); // json 값 읽기
